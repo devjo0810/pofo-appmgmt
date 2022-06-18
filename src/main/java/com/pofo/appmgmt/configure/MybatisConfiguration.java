@@ -38,7 +38,7 @@ public class MybatisConfiguration {
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		sqlSessionFactoryBean.setTypeAliasesPackage("com.pofo.appmgmt");
 		sqlSessionFactoryBean.setConfiguration(mybatisConfiguration);
-		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/Mapper.xml"));
+		sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/**/*Mapper.xml"));
 		return sqlSessionFactoryBean.getObject();
 	}
 	

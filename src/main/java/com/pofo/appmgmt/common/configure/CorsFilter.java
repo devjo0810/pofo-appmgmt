@@ -1,4 +1,4 @@
-package com.pofo.appmgmt.configure;
+package com.pofo.appmgmt.common.configure;
 
 import java.io.IOException;
 

@@ -9,6 +9,8 @@ import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.pofo.appmgmt.common.configure.CorsFilter;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
