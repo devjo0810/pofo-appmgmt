@@ -4,8 +4,80 @@
         
 <mapper namespace="com.pofo.appmgmt.login.mapper.LoginMapper">
 	<select id="login" resultType="UserModel">
-		SELECT * FROM TBL_USER_M
-		WHERE EML_ADDR = #{emlAddr}
+		SELECT
+			  SERS_NUM
+			, USER_NM
+			, EML_ADDR
+			, CLPH_NUM
+			, USER_TYPE_CD
+			, USER_STAT_CD
+			, RCNT_LGN_DT
+			, PWD_FAIL_CNT
+		FROM TBL_USER_M
+		WHERE USE_YN = 1
+		AND EML_ADDR = #{emlAddr}
 		AND PWD = #{pwd}
 	</select>
+	
+	<insert id="signup">
+		INSERT INTO TBL_USER_M
+		(
+			  EML_ADDR
+			, PWD
+			, USER_NM
+			, CLPH_NUM
+			, USER_TYPE_CD
+			, USER_STAT_CD
+			, REG_DT
+		)
+		VALUES
+		(
+			  #{emlAddr}
+			, #{pwd}
+			, #{userNm}
+			, #{clphNum}
+			, '100'
+			, '100'
+			, NOW()
+		)
+	</insert>
+	
+	<update id="updateRcntLgnDt">
+		UPDATE TBL_USER_M
+		SET   RCNT_LGN_DT = #{rcntLgnDt}
+			, PWD_FAIL_CNT = 0
+			, UPDT_DT = NOW()
+		WHERE SERS_NUM = #{sersNum}
+	</update>
+	
+	<select id="checkUserByEmlAddr" parameterType="string" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM TBL_USER_M
+		WHERE EML_ADDR = #{emlAddr}
+	</select>
+	
+	<update id="incrementPwdFailCnt" parameterType="string">
+		UPDATE TBL_USER_M
+		SET   PWD_FAIL_CNT = PWD_FAIL_CNT + 1
+			, UPDT_DT = NOW()
+		WHERE USE_YN = 1
+		AND EML_ADDR = #{emlAddr}
+	</update>
+	
+	<update id="initPwdFailCnt" parameterType="string">
+		UPDATE TBL_USER_M
+		SET   PWD_FAIL_CNT = 0
+			, UPDT_DT = NOW()
+		WHERE USE_YN = 1
+		AND EML_ADDR = #{emlAddr}
+	</update>
+	
+	<select id="findPwdFailCntByEmlAddr" parameterType="string" resultType="int">
+		SELECT
+			PWD_FAIL_CNT
+		FROM TBL_USER_M
+		WHERE EML_ADDR = #{emlAddr}
+	</select>
+	
 </mapper>

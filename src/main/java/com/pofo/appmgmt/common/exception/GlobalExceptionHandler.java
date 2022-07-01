@@ -1,11 +1,15 @@
 package com.pofo.appmgmt.common.exception;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,6 +74,19 @@ public class GlobalExceptionHandler {
 		} else if (e instanceof ValidationException) {
 			apiResponseType = ResponseType.NOT_VALID_AGUMANT;
 			apiResponseMessage = e.getMessage();
+			
+		// Valid Exception
+		} else if (e instanceof MethodArgumentNotValidException) {
+			apiResponseType = ResponseType.NOT_VALID_AGUMANT;
+			MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
+			
+			List<String> errors = ex.getBindingResult()
+									.getFieldErrors()
+									.stream()
+									.map(x -> x.getDefaultMessage())
+									.collect(Collectors.toList());
+			
+			apiResponseMessage = errors.toString();
 			
 		} else {
 			apiResponseType = ResponseType.ERROR;
