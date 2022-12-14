@@ -1,19 +1,17 @@
 package com.pofo.appmgmt.login.mapper;
 
-import javax.validation.Valid;
-
 import org.apache.ibatis.annotations.Mapper;
 
 import com.pofo.appmgmt.common.model.UserModel;
-import com.pofo.appmgmt.login.model.LoginModel;
-import com.pofo.appmgmt.login.model.SignupModel;
+import com.pofo.appmgmt.login.dto.request.LoginRequestDto;
+import com.pofo.appmgmt.login.dto.request.SignupRequestDto;
 
 @Mapper
 public interface LoginMapper {
 
-	UserModel login(LoginModel model);
+	UserModel login(LoginRequestDto model);
 
-	void signup(SignupModel model);
+	void signup(SignupRequestDto model);
 
 	void updateRcntLgnDt(UserModel user);
 

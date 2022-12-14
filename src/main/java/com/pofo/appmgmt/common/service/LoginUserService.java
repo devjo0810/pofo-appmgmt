@@ -1,5 +1,8 @@
 package com.pofo.appmgmt.common.service;
 
+import java.time.Duration;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +17,7 @@ import com.pofo.appmgmt.common.util.RequestUtils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,14 +30,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoginUserService {
 	
-	private final RedisTemplate redisTemplate;
+	private final RedisTemplate<String, String> redisTemplate;
 	
 	private final HttpServletRequest request;
 	
 	@Value("${spring.jwt.key}")
 	private String publicKey;
 	
-	private final String JWT_PREFIX = "jwt.";
+	private final String JWT_PREFIX = "jwt.";		// jwt prefix
+	private final long JWT_EXPIRE = 2 * 60 * 60L;	// jwt 만료시간 (2H)
 	
 	
 	/**
@@ -151,6 +156,28 @@ public class LoginUserService {
 		user.setUserStatCd(this.getUserStatCdByJwt(jwt));
 		
 		return user;
+	}
+	
+	/**
+	 * Comment	: JWT 토큰 발
+	 * @param model<UserModel>
+	 */
+	public void generateToken(UserModel model) {
+		log.info("token model : {}", model);
+		String token = Jwts.builder()
+				.setHeaderParam("typ", "JWT")
+				.setHeaderParam("regDate", System.currentTimeMillis())
+				.setHeaderParam("alg", SignatureAlgorithm.HS256)
+				.claim("sersNum", model.getSersNum()) // 일련번호(key)
+				.claim("userNm", model.getUserNm()) // 사용자명 
+				.claim("emlAddr", model.getEmlAddr()) // 이메일주소 
+				.claim("userTypeCd", model.getUserTypeCd()) // 사용자타입코드 
+				.claim("userStatCd", model.getUserStatCd()) // 사용자상태코드 
+				.setIssuedAt(new Date(System.currentTimeMillis())) // 토큰 발행시간 
+				.signWith(SignatureAlgorithm.HS256, this.generateKey())
+				.compact();
+		
+		redisTemplate.opsForValue().set(JWT_PREFIX + model.getSersNum(), token, Duration.ofSeconds(JWT_EXPIRE));
 	}
 	
 	/**

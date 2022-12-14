@@ -3,10 +3,12 @@ package com.pofo.appmgmt.common.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class UserModel {
 	private String sersNum;		// 일련번호 
 	private String userNm;		// 사용자명 

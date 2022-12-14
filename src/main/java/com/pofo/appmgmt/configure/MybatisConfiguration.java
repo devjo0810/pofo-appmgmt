@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Configuration
 @MapperScan(value = "com.pofo.appmgmt", sqlSessionFactoryRef = "sqlSessionFactory")
 @EnableTransactionManagement
