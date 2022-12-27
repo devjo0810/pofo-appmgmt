@@ -1,6 +1,6 @@
 # pofo-appmgmt
 
-## inteliij 설정
+## intellij 설정
 ### file and code template 추가
 ```
 /**

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.pofo.appmgmt.domain.code.mapper.CodeMapper">
+
+	<insert id="saveCodeGroup">
+        INSERT INTO TBL_CMM_CD_M
+        (     CMM_CD_GRP_ID
+            , CMM_CD_GRP_NM
+            , CMM_CD_GRP_DSC
+            , USE_YN
+            , RGSR_NUM
+            , REG_DT
+        )
+        VALUES
+        (     #{cmmCdGrpId}
+            , #{cmmCdGrpNm}
+            , #{cmmCdGrpDsc}
+            , #{useYn}
+            , 0
+            , NOW()
+        )
+        ON DUPLICATE KEY UPDATE
+              CMM_CD_GRP_NM = #{cmmCdGrpNm}
+            , CMM_CD_GRP_DSC = #{cmmCdGrpDsc}
+            , USE_YN = #{useYn}
+            , UPSR_NUM = 0
+            , UPDT_DT = NOW()
+    </insert>
+</mapper>
