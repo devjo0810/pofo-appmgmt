@@ -28,4 +28,24 @@
             , UPSR_NUM = 0
             , UPDT_DT = NOW()
     </insert>
+
+    <select id="getCodeGroupList" resultType="CodeGroupResponse">
+        SELECT
+              CMM_CD_GRP_ID
+            , CMM_CD_GRP_NM
+            , CMM_CD_GRP_DSC
+            , USE_YN
+            , RGSR_NUM AS RGSR_NM
+            , REG_DT
+            , UPSR_NUM AS UPSR_NM
+            , UPDT_DT
+        FROM TBL_CMM_CD_M
+        WHERE 1=1
+        <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(cmmCdGrpId)">
+            AND CMM_CD_GRP_ID LIKE CONCAT('%', #{cmmCdGrpId}, '%')
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(cmmCdGrpNm)">
+            AND CMM_CD_GRP_NM LIKE CONCAT('%', #{cmmCdGrpNm}, '%')
+        </if>
+    </select>
 </mapper>
