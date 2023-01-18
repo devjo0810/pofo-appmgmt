@@ -4,6 +4,7 @@
         
 <mapper namespace="com.pofo.appmgmt.domain.code.mapper.CodeMapper">
 
+    <!-- 코드 그룹 저장 -->
 	<insert id="saveCodeGroup">
         INSERT INTO TBL_CMM_CD_M
         (     CMM_CD_GRP_ID
@@ -29,6 +30,7 @@
             , UPDT_DT = NOW()
     </insert>
 
+    <!-- 코드 그룹 조회 -->
     <select id="getCodeGroupList" resultType="CodeGroupResponse">
         SELECT
               CMM_CD_GRP_ID
@@ -36,9 +38,9 @@
             , CMM_CD_GRP_DSC
             , USE_YN
             , RGSR_NUM AS RGSR_NM
-            , REG_DT
+            , DATE_FORMAT(REG_DT, '%Y-%m-%d %T') AS REG_DT
             , UPSR_NUM AS UPSR_NM
-            , UPDT_DT
+            , DATE_FORMAT(UPDT_DT, '%Y-%m-%d %T') AS UPDT_DT
         FROM TBL_CMM_CD_M
         WHERE 1=1
         <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(cmmCdGrpId)">
@@ -48,4 +50,81 @@
             AND CMM_CD_GRP_NM LIKE CONCAT('%', #{cmmCdGrpNm}, '%')
         </if>
     </select>
+
+    <!-- 코드 상세 목록 조회 -->
+    <select id="getCodeDetailList" resultType="CodeDetailResponse">
+        SELECT
+              SERS_NUM
+            , CMM_CD_GRP_ID
+            , CMM_CD
+            , CMM_CD_NM
+            , CMM_CD_DSC
+            , SORT_SQNC
+            , REFR_ID1
+            , REFR_ID2
+            , REFR_ID3
+            , REFR_ID4
+            , USE_YN
+            , RGSR_NUM AS RGSR_NM
+            , DATE_FORMAT(REG_DT, '%Y-%m-%d %T') AS REG_DT
+            , UPSR_NUM AS UPSR_NM
+            , DATE_FORMAT(UPDT_DT, '%Y-%m-%d %T') AS UPDT_DT
+        FROM TBL_CMM_CD_D
+        WHERE 1=1
+        <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(cmmCdGrpId)">
+            AND CMM_CD_GRP_ID = #{cmmCdGrpId}
+        </if>
+        ORDER BY CMM_CD_GRP_ID, SORT_SQNC
+    </select>
+
+    <!-- 코드 상세 저장 -->
+    <insert id="saveCodeDetail">
+        INSERT INTO TBL_CMM_CD_D
+        (     CMM_CD_GRP_ID
+            , CMM_CD
+            , CMM_CD_NM
+            , CMM_CD_DSC
+            , SORT_SQNC
+            , REFR_ID1
+            , REFR_ID2
+            , REFR_ID3
+            , REFR_ID4
+            , USE_YN
+            , RGSR_NUM
+            , REG_DT
+        )
+        VALUES
+        (     #{cmmCdGrpId}
+            , #{cmmCd}
+            , #{cmmCdNm}
+            , #{cmmCdDsc}
+            , #{sortSqnc}
+            , #{refrId1}
+            , #{refrId2}
+            , #{refrId3}
+            , #{refrId4}
+            , #{useYn}
+            , 0
+            , NOW()
+        )
+    </insert>
+
+    <!-- 코드 상세 수정 -->
+    <update id="updateCodeDetail">
+        UPDATE TBL_CMM_CD_D
+        SET   CMM_CD = #{cmmCd}
+            , CMM_CD_NM = #{cmmCdNm}
+            , CMM_CD_DSC = #{cmmCdDsc}
+            , SORT_SQNC = #{sortSqnc}
+            , REFR_ID1 = #{refrId1}
+            , REFR_ID2 = #{refrId2}
+            , REFR_ID3 = #{refrId3}
+            , REFR_ID4 = #{refrId4}
+            , USE_YN = #{useYn}
+            , UPSR_NUM = 0
+            , UPDT_DT = NOW()
+        WHERE 1=1
+        AND SERS_NUM = #{sersNum}
+    </update>
+
 </mapper>

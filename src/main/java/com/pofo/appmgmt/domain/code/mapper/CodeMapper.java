@@ -1,5 +1,7 @@
 package com.pofo.appmgmt.domain.code.mapper;
 
+import com.pofo.appmgmt.domain.code.dto.CodeDetailRequest;
+import com.pofo.appmgmt.domain.code.dto.CodeDetailResponse;
 import com.pofo.appmgmt.domain.code.dto.CodeGroupRequest;
 import com.pofo.appmgmt.domain.code.dto.CodeGroupResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,4 +14,9 @@ public interface CodeMapper {
     List<CodeGroupResponse> getCodeGroupList(Map<String, Object> params);
     void saveCodeGroup(CodeGroupRequest params);
 
+    List<CodeDetailResponse> getCodeDetailList(Map<String, Object> params);
+
+    void saveCodeDetail(CodeDetailRequest params);
+
+    void updateCodeDetail(CodeDetailRequest params);
 }

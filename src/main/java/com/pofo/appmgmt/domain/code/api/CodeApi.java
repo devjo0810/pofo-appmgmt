@@ -1,6 +1,8 @@
 package com.pofo.appmgmt.domain.code.api;
 
 import com.pofo.appmgmt.domain.code.biz.CodeService;
+import com.pofo.appmgmt.domain.code.dto.CodeDetailRequest;
+import com.pofo.appmgmt.domain.code.dto.CodeDetailResponse;
 import com.pofo.appmgmt.domain.code.dto.CodeGroupRequest;
 import com.pofo.appmgmt.domain.code.dto.CodeGroupResponse;
 import com.pofo.appmgmt.global.dto.ApiResponse;
@@ -22,7 +24,6 @@ public class CodeApi {
     @GetMapping
     public ApiResponse<List<CodeGroupResponse>> getCodeGroupList(@RequestParam Map<String, Object> params) {
 
-
         return new ApiResponse<List<CodeGroupResponse>>()
                 .setStatus(ResponseType.SUCCESS.code())
                 .setResult(service.getCodeGroupList(params));
@@ -36,11 +37,22 @@ public class CodeApi {
      */
     @PostMapping
     public ApiResponse saveCodeGroup(@Valid @RequestBody final List<CodeGroupRequest> params) {
-        for (CodeGroupRequest request : params) {
-            service.saveCodeGroup(request);
-        }
+        params.forEach(item -> service.saveCodeGroup(item));
 
         return new ApiResponse().setStatus(ResponseType.SUCCESS.code());
     }
 
+    @GetMapping("/detail")
+    public ApiResponse<List<CodeDetailResponse>> getCodeDetailList(@RequestParam Map<String, Object> params) {
+        return new ApiResponse<List<CodeDetailResponse>>()
+                .setStatus(ResponseType.SUCCESS.code())
+                .setResult(service.getCodeDetailList(params));
+    }
+
+    @PostMapping("/detail")
+    public ApiResponse saveCodeDetail(@Valid @RequestBody final List<CodeDetailRequest> params) {
+        params.forEach(item -> service.saveCodeDetail(item));
+
+        return new ApiResponse().setStatus(ResponseType.SUCCESS.code());
+    }
 }
