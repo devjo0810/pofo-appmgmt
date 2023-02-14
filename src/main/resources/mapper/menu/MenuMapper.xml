@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.pofo.appmgmt.domain.menu.mapper.MenuMapper">
+
+    <!-- 메뉴 저장 -->
+	<insert id="saveMenu">
+        INSERT INTO TBL_MENU_M
+        (     MENU_ID
+            , HRNK_MENU_ID
+            , MENU_STEP
+            , MENU_NM
+            , WDGT_MENU_NM
+            , SORT_SQNC
+            , MENU_DVSN
+            , MENU_YN
+            , USE_YN
+            , RGSR_NUM
+            , REG_DT
+        )
+        VALUES
+        (     #{menuId}
+            , #{hrnkMenuId}
+            , #{menuStep}
+            , #{menuNm}
+            , #{wdgtMenuNm}
+            , #{sortSqnc}
+            , #{menuDvsn}
+            , #{menuYn}
+            , #{useYn}
+            , 0
+            , NOW()
+        )
+    </insert>
+
+    <select id="findMenusByMenuId" resultType="MenuResponse">
+        SELECT
+              SERS_NUM
+            , MENU_ID
+            , HRNK_MENU_ID
+            , MENU_STEP
+            , MENU_NM
+            , WDGT_MENU_NM
+            , SORT_SQNC
+            , MENU_DVSN
+            , MENU_YN
+            , USE_YN
+            , RGSR_NUM
+            , DATE_FORMAT(REG_DT, '%Y-%m-%d %T') AS REG_DT
+            , UPSR_NUM
+            , DATE_FORMAT(UPDT_DT, '%Y-%m-%d %T') AS UPDT_DT
+        FROM TBL_MENU_M
+        WHERE 1=1
+        AND HRNK_MENU_ID = #{menuId}
+        ORDER BY MENU_DVSN, SORT_SQNC
+    </select>
+
+</mapper>
