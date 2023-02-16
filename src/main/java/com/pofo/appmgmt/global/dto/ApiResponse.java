@@ -1,12 +1,7 @@
 package com.pofo.appmgmt.global.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 @Getter
@@ -18,8 +13,25 @@ import lombok.experimental.Accessors;
 public class ApiResponse<T> {
 
 	// 결과코
-	String status;
+	private String code;
 	
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	T result;
+	private T data;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private ErrorResponse error;
+
+	public ApiResponse(String code) {
+		this.code = code;
+	}
+
+	public ApiResponse(String code, T data) {
+		this.code = code;
+		this.data = data;
+	}
+
+	public ApiResponse(String code, ErrorResponse error) {
+		this.code = code;
+		this.error = error;
+	}
 }

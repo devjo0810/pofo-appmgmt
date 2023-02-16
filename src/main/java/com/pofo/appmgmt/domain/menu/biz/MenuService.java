@@ -6,7 +6,9 @@ import com.pofo.appmgmt.domain.menu.mapper.MenuMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * packageName    : com.pofo.appmgmt.domain.menu.biz
@@ -38,6 +40,26 @@ public class MenuService {
         } else {
             menu.setChildren(menus);
             menus.forEach(item -> this.recursiveFindMenus(item));
+        }
+    }
+
+    public List<MenuResponse> findMenusByMap(Map<String, Object> params) {
+        List<MenuResponse> menus = mapper.findMenusByMap(params);
+        menus.forEach(item -> this.recursiveFindMenusByMap(item));
+        return menus;
+    }
+
+    public void recursiveFindMenusByMap(MenuResponse menu) {
+        if (menu == null) return;
+        List<MenuResponse> menus = mapper.findMenusByMap(new HashMap<>(){{
+            put("menuId", menu.getMenuId());
+            put("menuDvsn", menu.getMenuDvsn());
+        }});
+        if (menus == null || menus.isEmpty()) {
+            menu.setChildren(null);
+        } else {
+            menu.setChildren(menus);
+            menus.forEach(item -> this.recursiveFindMenusByMap(item));
         }
     }
 

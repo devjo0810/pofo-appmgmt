@@ -56,4 +56,28 @@
         ORDER BY MENU_DVSN, SORT_SQNC
     </select>
 
+    <select id="findMenusByMap" resultType="MenuResponse">
+        SELECT
+            SERS_NUM
+             , MENU_ID
+             , HRNK_MENU_ID
+             , MENU_STEP
+             , MENU_NM
+             , WDGT_MENU_NM
+             , SORT_SQNC
+             , MENU_DVSN
+             , MENU_YN
+             , USE_YN
+             , RGSR_NUM
+             , DATE_FORMAT(REG_DT, '%Y-%m-%d %T') AS REG_DT
+             , UPSR_NUM
+             , DATE_FORMAT(UPDT_DT, '%Y-%m-%d %T') AS UPDT_DT
+        FROM TBL_MENU_M
+        WHERE 1=1
+          AND HRNK_MENU_ID = #{menuId}
+          AND MENU_DVSN = #{menuDvsn}
+          AND USE_YN = 1
+        ORDER BY MENU_DVSN, SORT_SQNC
+    </select>
+
 </mapper>

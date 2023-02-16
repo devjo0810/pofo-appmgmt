@@ -4,6 +4,9 @@
 GET http://localhost:8081/appmgmt/menus
 Content-Type: application/json
 
-{
-  "cmmCdGrpId": "test"
-}
+###
+
+GET http://localhost:8081/appmgmt/menus/200
+Content-Type: application/json
+
+###

@@ -1,14 +1,10 @@
 package com.pofo.appmgmt.global.error;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.pofo.appmgmt.global.dto.ApiResponse;
+import com.pofo.appmgmt.global.dto.ErrorResponse;
 import com.pofo.appmgmt.global.error.exception.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.pofo.appmgmt.global.type.ResponseType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,27 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.pofo.appmgmt.global.dto.ApiResponse;
-import com.pofo.appmgmt.global.type.ResponseType;
-
-import lombok.Data;
-import lombok.ToString;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-	private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-	
-	@Data
-	@ToString
-	public static class ErrorResponse {
-		String code;
-		String message;
-		
-		public ErrorResponse(String code, String message) {
-			this.code = code;
-			this.message = message;
-		}
-	}
 	
 	@ExceptionHandler(value = {Exception.class, RuntimeException.class})
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
@@ -46,7 +29,7 @@ public class GlobalExceptionHandler {
 			HttpServletResponse response,
 			Exception e) {
 		
-		logger.error(e.getMessage(), e);
+		log.error(e.getMessage(), e);
 		
 		ResponseType apiResponseType = null;
 		String apiResponseMessage = "";
@@ -96,10 +79,8 @@ public class GlobalExceptionHandler {
 		
 		ErrorResponse errorResponse = new ErrorResponse(apiResponseType.code(), apiResponseMessage);
 		
-		ApiResponse<ErrorResponse> apiResponse = new ApiResponse<ErrorResponse>()
-				.setStatus(apiResponseType.code())
-				.setResult(errorResponse);
-		
+		ApiResponse<ErrorResponse> apiResponse = new ApiResponse<>(apiResponseType.code(), errorResponse);
+
 		return apiResponse;
 	}
 	

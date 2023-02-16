@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/appmgmt/menus")
@@ -22,13 +24,23 @@ public class MenuApi {
     public ApiResponse<List<MenuResponse>> findMenus() {
         List<MenuResponse> result = menuService.findMenus();
 
-        return new ApiResponse<List<MenuResponse>>().setStatus(ResponseType.SUCCESS.code()).setResult(result);
+        return new ApiResponse<>(ResponseType.SUCCESS.code(), result);
+    }
+
+    @GetMapping("/{menu_dvsn}")
+    public ApiResponse<List<MenuResponse>> findMenusByMenuDvsn(@PathVariable("menu_dvsn") String menuDvsn) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("menuDvsn", menuDvsn);
+        params.put("menuId", "0");
+        List<MenuResponse> menus = menuService.findMenusByMap(params);
+
+        return new ApiResponse(ResponseType.SUCCESS.code(), menus);
     }
 
     @PostMapping
     public ApiResponse saveMenus(@Valid @RequestBody final List<MenuRequest> params) {
         params.forEach(item -> menuService.saveMenu(item));
 
-        return new ApiResponse().setStatus(ResponseType.SUCCESS.code());
+        return new ApiResponse(ResponseType.SUCCESS.code());
     }
 }

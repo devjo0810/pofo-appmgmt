@@ -24,9 +24,7 @@ public class CodeApi {
     @GetMapping
     public ApiResponse<List<CodeGroupResponse>> getCodeGroupList(@RequestParam Map<String, Object> params) {
 
-        return new ApiResponse<List<CodeGroupResponse>>()
-                .setStatus(ResponseType.SUCCESS.code())
-                .setResult(service.getCodeGroupList(params));
+        return new ApiResponse<>(ResponseType.SUCCESS.code(), service.getCodeGroupList(params));
     }
 
     /**
@@ -39,20 +37,18 @@ public class CodeApi {
     public ApiResponse saveCodeGroup(@Valid @RequestBody final List<CodeGroupRequest> params) {
         params.forEach(item -> service.saveCodeGroup(item));
 
-        return new ApiResponse().setStatus(ResponseType.SUCCESS.code());
+        return new ApiResponse(ResponseType.SUCCESS.code());
     }
 
     @GetMapping("/detail")
     public ApiResponse<List<CodeDetailResponse>> getCodeDetailList(@RequestParam Map<String, Object> params) {
-        return new ApiResponse<List<CodeDetailResponse>>()
-                .setStatus(ResponseType.SUCCESS.code())
-                .setResult(service.getCodeDetailList(params));
+        return new ApiResponse<>(ResponseType.SUCCESS.code(), service.getCodeDetailList(params));
     }
 
     @PostMapping("/detail")
     public ApiResponse saveCodeDetail(@Valid @RequestBody final List<CodeDetailRequest> params) {
         params.forEach(item -> service.saveCodeDetail(item));
 
-        return new ApiResponse().setStatus(ResponseType.SUCCESS.code());
+        return new ApiResponse(ResponseType.SUCCESS.code());
     }
 }
